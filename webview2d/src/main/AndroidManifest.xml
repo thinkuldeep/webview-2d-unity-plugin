@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tk.webxr.webview2d" >
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application>
+        <activity
+            android:name=".WebViewActivity"
+            android:label="Web XR Native" android:theme="@style/Theme.AppCompat">
+        </activity>
+</application>
+
+</manifest>
