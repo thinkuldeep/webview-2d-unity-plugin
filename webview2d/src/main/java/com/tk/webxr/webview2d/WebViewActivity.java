@@ -46,7 +46,7 @@ public class WebViewActivity extends AppCompatActivity {
                         resultReceiver.send(INTENT_RESULT_CODE, bundle);
                         Log.d(TAG, "sent response: -> " + command);
                     }
-                    view.loadUrl(baseURL + URLEncoder.encode("?result=Command " + command + " executed"));
+                    view.loadUrl(baseURL + "?result=" +  URLEncoder.encode("Command " + command + " executed"));
                     return true;
                 }
                 view.loadUrl(url);
