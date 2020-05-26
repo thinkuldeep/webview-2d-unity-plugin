@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.os.SystemClock;
 import android.util.Log;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
@@ -19,10 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class WebViewActivity extends AppCompatActivity {
     private static final String TAG = WebViewActivity.class.getName();
-    public static final String INTENT_RESPONSE_CALLBACK = "resultReceiver";
-    public static final int INTENT_RESULT_CODE = 1;
-    public static final String INTENT_RESULT_PARAM_NAME = "command";
-    public static final String INTENT_INPUT_URL = "url";
+    private static final String RESPONSE_CALLBACK = "resultReceiver";
+    private static final int RESULT_CODE = 1;
+    private static final String RESULT_PARAM_NAME = "command";
+    private static final String INPUT_URL = "url";
 
     private WebView webView;
 
@@ -30,7 +29,7 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        final String baseURL = getIntent().getStringExtra(INTENT_INPUT_URL);
+        final String baseURL = getIntent().getStringExtra(INPUT_URL);
 
         webView = new WebView(this);
         webView.setWebViewClient(new WebViewClient() {
@@ -39,11 +38,11 @@ public class WebViewActivity extends AppCompatActivity {
                 Log.d(TAG, "shouldOverrideUrlLoading" + url);
                 String command =  uri.getQueryParameter("command");
                 if (command !=null) {
-                    ResultReceiver resultReceiver = getIntent().getParcelableExtra(INTENT_RESPONSE_CALLBACK);
+                    ResultReceiver resultReceiver = getIntent().getParcelableExtra(RESPONSE_CALLBACK);
                     if(resultReceiver!=null) {
                         Bundle bundle = new Bundle();
                         bundle.putString("command", command);
-                        resultReceiver.send(INTENT_RESULT_CODE, bundle);
+                        resultReceiver.send(RESULT_CODE, bundle);
                         Log.d(TAG, "sent response: -> " + command);
                     }
                     view.loadUrl(baseURL + "?result=" +  URLEncoder.encode("Command " + command + " executed"));
@@ -75,8 +74,8 @@ public class WebViewActivity extends AppCompatActivity {
 
     public static void launchActivity(Activity activity, String url, IResponseCallBack callBack){
       Intent intent = new Intent(activity, WebViewActivity.class);
-      intent.putExtra(WebViewActivity.INTENT_INPUT_URL, url);
-      intent.putExtra(WebViewActivity.INTENT_RESPONSE_CALLBACK, new CustomReceiver(callBack));
+      intent.putExtra(WebViewActivity.INPUT_URL, url);
+      intent.putExtra(WebViewActivity.RESPONSE_CALLBACK, new CustomReceiver(callBack));
       activity.startActivity(intent);
     }
 
@@ -90,8 +89,8 @@ public class WebViewActivity extends AppCompatActivity {
 
     @Override
     protected void onReceiveResult(int resultCode, Bundle resultData) {
-      if(WebViewActivity.INTENT_RESULT_CODE == resultCode){
-        String command = resultData.getString(WebViewActivity.INTENT_RESULT_PARAM_NAME);
+      if(WebViewActivity.RESULT_CODE == resultCode){
+        String command = resultData.getString(WebViewActivity.RESULT_PARAM_NAME);
         callBack.OnSuccess(command);
       } else {
         callBack.OnFailure("Not a valid code");
