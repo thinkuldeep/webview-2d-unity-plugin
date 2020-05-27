@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New form of Web XR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div  id="myDIV" class="header">
+    <h2>New form of Web XR</h2>
+    <h6>Control a device from a web page without a native app</h6>
+    <div>
+    <span onclick="javascript: doAction('volume-up')" class="btn">Volume Up</span>
+    <span onclick="javascript: doAction('volume-down')" class="btn">Volume Down</span>
+    </div>
+    <div style="margin: 25px">
+    <span onclick="javascript: doAction('torch-on')" class="btn">Torch On</span>
+    <span onclick="javascript: doAction('torch-off')" class="btn">Torch Off</span>
+    </div>
+</div>
+<div id="result" class="result">
+
+</div>
+
+
+<script>
+    function onLoad(){
+        const urlParams = new URLSearchParams(window.location.search);
+        const result = urlParams.get('result');
+        var resultElement = document.getElementById('result');
+        resultElement.innerHTML = result;
+    }
+    onLoad();
+    function doAction(command){
+       var baseURL = window.location.protocol + "//" + window.location.host + window.location.pathname;
+       window.location = baseURL + "?command=" + command;
+    }
+</script>
+
+</body>
+</html>

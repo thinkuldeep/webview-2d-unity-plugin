@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WebViewActivity.launchActivity(this, "https://thinkuldeep.github.io/webxr-native/", new CommandHandler());
+        WebViewActivity.launchActivity(this, "file:///android_asset/index.html", new CommandHandler());
     }
 
     class CommandHandler implements IResponseCallBack {
